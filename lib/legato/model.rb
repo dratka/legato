@@ -85,6 +85,7 @@ module Legato
     #   model, allowing for chainable behavior before kicking of the request
     #   to Google Analytics which returns the result data
     def results(profile, options = {})
+      # binding.pry
       Query.new(self).results(profile, options)
     end
 

@@ -29,7 +29,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :sort, :limit, :offset, :quota_user #, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset, :quota_user, :segment #, :segment # individual, overwritten
     attr_accessor :filters, :segment_filters # combined, can be appended to
 
     def initialize(klass)
@@ -84,12 +84,12 @@ module Legato
 
       apply_basic_options(options)
       # apply_filter_options(options[:filters])
-
+      # segment = options.has_key?(:segment) ? options.delete(:segment) : nil
       self
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date, :quota_user].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date, :quota_user,:segment].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end
@@ -183,9 +183,9 @@ module Legato
       @sort = Legato::ListParameter.new(:sort, arr)
     end
 
-    def segment
-      "dynamic::#{segment_filters.to_params}" if segment_filters.any?
-    end
+    # def 
+    #   "dsegmentynamic::#{segment_filters.to_params}" if segment_filters.any?
+    # end
 
     # def segment_id
     #   segment.nil? ? nil : "gaid::#{segment}"
@@ -207,7 +207,7 @@ module Legato
         'fields' => REQUEST_FIELDS,
         'quotaUser' => quota_user
       }
-
+      # binding.pry
       [metrics, dimensions, sort].each do |list|
         params.merge!(list.to_params) unless list.nil?
       end
